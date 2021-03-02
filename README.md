@@ -1,5 +1,4 @@
-# Two-qubit CZ gate implementation with trapped neutral atoms:
-# a numerical simulation
+# Two-qubit CZ gate implementation with trapped neutral atoms: a numerical simulation
 
 ## Abstract
 
@@ -25,7 +24,8 @@ Multi-qubit gates can be implemented with trapped neutral atoms by driving them 
     3. Timing analysis of time evolution methods
 7. Conclusions
 
-## Authors
+
+## Authors
 
 * [**Alice Pagano**](https://github.com/AlicePagano) (University of Padua)
 * [**Michele Puppin**](https://github.com/michelepuppin) (University of Padua)
