@@ -18,8 +18,8 @@ Multi-qubit gates can be implemented with trapped neutral atoms by driving them 
     3. Crank-Nicolson method with LU decomposition
 6. Results
     1. CZ gate in a two-qubit system
-        6.1.1 Correct behaviour check and optimal parameters variation
-        6.1.1 12 B. Measurement process with Gaussian noise on τ and ∆
+        1. Correct behaviour check and optimal parameters variation
+        2. Measurement process with Gaussian noise on τ and ∆
     2. CZ gate in a chain of N-qubit
     3. Timing analysis of time evolution methods
 7. Conclusions
