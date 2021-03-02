@@ -2,7 +2,7 @@
 
 ## Abstract
 
-Multi-qubit gates can be implemented with trapped neutral atoms by driving them to highly excited Rydberg states, in which nearby Rydberg atoms can interact very strongly and in a controlled way. In this Report, we simulate the dynamics of a system under the application of a controlled-phase gate physically implemented in [1]. After a physical and theoretical description of the two-qubit CZ gate design, the dynamics of a two- qubit system is simulated in both the perfect and imperfect Rydberg blockade regime by varying the optimal parameters suggested. Then, we consider the CZ gate in the case of a chain of N-qubit. A Gaussian noise is introduced on the optimal parameters to investigate noise effects with an increasing number of qubits. Numerical methods for performing unitary time evolution are also discussed and their performances are tested.
+Multi-qubit gates can be implemented with trapped neutral atoms by driving them to highly excited Rydberg states, in which nearby Rydberg atoms can interact very strongly and in a controlled way. In this Report, we simulate the dynamics of a system under the application of a controlled-phase gate physically implemented in [1](https://arxiv.org/abs/1908.06101). After a physical and theoretical description of the two-qubit CZ gate design, the dynamics of a two- qubit system is simulated in both the perfect and imperfect Rydberg blockade regime by varying the optimal parameters suggested. Then, we consider the CZ gate in the case of a chain of N-qubit. A Gaussian noise is introduced on the optimal parameters to investigate noise effects with an increasing number of qubits. Numerical methods for performing unitary time evolution are also discussed and their performances are tested.
 
 ## Contents
 
