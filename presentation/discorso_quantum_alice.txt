@@ -1,0 +1,212 @@
+SLIDE 0 - Titlepage
+----------------------------------------------------------
+
+Buongiorno, io e Michele abbiamo svolto un progetto dal titolo two-qubit CZ gate implementation with trapped neutral atoms: a numerical simulation.
+
+Io vi introdurrò la descrizione fisica e teorica di un nuovo protocollo per la realizzazione di un two-qubit CZ gate facendo riferimento ad un recente articolo pubblicato da Harry Levine e altri. 
+Inoltre esporrò i risultati di una sua simulazione applicata a un sistema di due atomi. 
+
+
+
+SLIDE 1 - Introduction
+----------------------------------------------------------
+
+Negli ultimi anni, le operazioni quantistiche implementate con atomi neutri intrappolati stanno facendo progressi significativi.
+
+Nello specifico, un gate a multi-qubit può essere implementato con atomi neutri portando quest'ultimi a stati di Rydberg eccitati, nei quali gli atomi possono interagire fortemente e in un modo controllato.
+
+In questo progetto, è stato analizzato e simulato un nuovo protocollo per l'implementazione fisica di un CZ gate.
+
+In particolare, quest'ultimo mappa la base computazionale come:
+
+- lo stato 00 va in 00
+- lo stato 01 e 10 acquisiscono una fase dinamica phi
+- lo stato 11 acquisisce una fase dinamica dipendente da phi
+
+
+
+SLIDE 2 - Physical implementation of CZ gate
+----------------------------------------------------------
+
+Nell'esperimento reale gli atomi neutri sono intrappolati in optical tweezer e organizzati in un array mono-dimensional in gruppi di due.
+
+Vi è un laser globale (in rosso) che accoppia gli stati 0 e 1. Un altro laser globale serve per eccitare l'atomo dallo stato 1 ad r. Inoltre, un laser locale (in viola) è focalizzato sugli atomi a sinistra di ogni coppia.
+
+Il qubit è codificato negli stati iperfini 0 = 5 S1/2 F=1 mF=0 e 1 =  5 S1/2 F=2 mF=0
+
+All'inizio dell'esperimento tutti i qubit sono inizializzati in 0 tramite un procedura con pompaggio ottico Raman-assistito.
+
+
+
+SLIDE 3 - Physical implementation of CZ gate
+----------------------------------------------------------
+
+Quindi i livelli atomici rilevanti per l'implementazione di un CZ gate sono:
+
+- lo stato 0
+- lo stato 1
+- lo stato r
+
+con Rabi frequency rispettivamente Omega01 e Omega.
+
+Il nuovo protocollo per l'implementazione di un CZ gate consiste in 
+
+- due impulsi laser globali, dove il secondo è ruotato di un angolo xi
+- i due impulsi hanno stessa lunghezza temporale tau
+- delta è il detuning che accoppia gli stati 1 e r
+
+L'idea alla base è che atomi vicini non possono essere eccitati entrambi allo stato di Rydberg a causa della Rydberg blockade.
+
+
+
+SLIDE 4 - Theoretical design of two-qubit CZ gate
+----------------------------------------------------------
+
+Nel caso in cui l'interazione tra i due atomi è molto forte, quindi il coefficiente V è molto grande, ci troviamo in un regime di Rydberg blockade perfetto e la dinamica del sistema si può semplificare nel seguente modo:
+
+- lo stato 00 non evolve, infatti non è accoppiato con il laser;
+
+- se un atomo è nello stato 0 e l'altro è in 1, solo quello in 1 evolve. La dinamica è come quella di un sistema a due livelli con stati 1 e r e hamiltoniana come in equazione 2. Notiamo che abbiamo un sistema con rabi frequency Omega e detuning Delta;
+
+- se entrambi gli atomi si trovano nello stato 1, la dinamica è come quella di un sistema a due livelli, però con stati a2 e b2, ovvero 11 e una combinazione degli stati r1 e 1r. L'hamiltoniana ha Rabi frequency sqrt(2)Omega e detuning Delta ed è come in equazione 3.
+
+Matematicamente e ai fini simulativi, ogni impulso è raprresentato da un'evoluzione unitaria dello stato come in 4. Invece, il cambio della fase del laser tra i due impulsi non è altro che una rotazione di angolo xi, della rabi frequency Omega.
+
+
+
+SLIDE 5 - Theoretical design of two-qubit CZ gate
+----------------------------------------------------------
+
+Per un fissato valore di detuning:
+
+- la lunghezza temporale dell'impulso è scelta in modo tale che il primo impulso corrisponda a un'oscillazione incompleta se il sistema si trova in 01, invece se il sistema si trova in 11 questo ritorna in se stesso acquisendo una fase dinamica.
+
+- inoltre, il secondo impulso come già detto è ruotato di un angolo xi rispetto al primo. Questa rotazione permette che dopo il secondo impulso di lunghezza tau, il sistema 01 torni in se stesso e per il sistema 11 vi è un'altra oscillazione completa.
+
+Matematicamente, la durata dell'impulso e lo shift sono scelti come il primo funzione di Delta e Omega come in 6. Il secondo come funzione di Delta/Omega e tau come in 7.
+
+I parametri ottimali suggeriti dal paper sono come in 8a, 8b e 8c.
+
+
+
+SLIDE 6 - Theoretical design of two-qubit CZ gate
+----------------------------------------------------------
+
+Un'assunzione di una Rydberg blockade non perfetta, dunque un valore finito di V, influenza la dinamica solo se il sistema è nello stato 11.
+
+Infatti, in tal caso, il sistema può essere descritto da uno a tre livelli, con stati a2, b2 e c2 e Hamiltoniana come in 9.
+
+Nel caso generale di piccola V e un dato detuning, si può sempre trovare un valore di Omega e tau tale che se il sistema è inizialmente in 11 ritorna su se stesso già dopo il primo impulso, come nel caso di grandi V.
+
+Con V molto grandi, si ottiene il comportamento da sistema a due livelli descritto prima, però bisogna prima rinormalizzare il detuning di un determinato fattore.
+
+
+
+SLIDE 7 - Code implementation of two-qubit CZ gate
+----------------------------------------------------------
+
+Riguardo l'implementazione del codice, abbiamo considerato un sistema composto solo da due atomi ognuno dei quali può essere dunque negli stati 0, 1 e r. Quindi ogni vettore ha una dimensione di 9.
+
+La dinamica del sistema sotto l'applicazione del CZ gate è stata simulata per mezzo della libreria Python QuTip.
+
+A sinistra, vi è il codice Python con cui è stata implementata in codice l'hamiltoniana totale del sistema nel caso di Rydberg blockade.
+
+A destra vi è il codice con l'implementazione del CZ gate. Abbiamo dunque discretizzato il tempo tra 0 e tau, applicato il primo impulso, ruotato omega di xi, e applicato il secondo impulso.
+
+
+
+SLIDE 8 - Results 
+----------------------------------------------------------
+
+Per prima cosa si è verificata la correttezza dell'implementazione fatta.
+
+Consideriamo il caso di blockade perfetta. Per verificare che la dinamica di un sistema inizialmente in 01 o in 11 sia come quella di un sistema a due livelli come spiegato teoricamente, in figura è riportata la popolazione dei vari livelli in funzione del tempo: a sinistra per un sistema inizialmente in 01 e a destra per uno in 11.
+
+In entrambi i grafici: 
+
+- in blu: vi è la curva nel caso di un detuning nullo. In questo caso abbiamo le oscillazioni che sono il più efficienti. Vanno da 0 a 1.
+
+- in arancione abbiamo il caso dei parametri ottimali.
+
+- in verde: abbiamo impostato 4 volte il valore del parametro ottimale.
+
+Nel caso del grafico a sinistra vediamo inoltre che la Rabi frequency è Omega. Invece se il sistema è inizialmente in 11, la rabi frequency è radice di 2 omega.
+
+
+
+SLIDE 9 - Results 
+----------------------------------------------------------
+
+Poi come detto, la durata dell'impulso e la rotazione del secondo impulso sono stati scelti in modo tale che al termine dell'applicazione del gate, gli stati tornino in se stessi acquisendo una fase dinamica.
+
+A sinistra, riportiamo la fase dinamica phi01 acquisita da un sistema in 01 in funzione del rapporto Delta/Omega. A destra riportiamo invece la fase dinamica phi11 acquisita da un sistema in 11 sempre in funzione di Delta/Omega.
+
+Dal grafico di destra, notiamo che vi è un valore del detuning (rappresentato dal pallino arancione) tale che la fase phi11 e  e phi01 siano direttamente proporzionali come phi11= 2phi01-pi, realizzando dunque la mappa del CZ gate desiderata.
+
+Questi risultati mostrati fin'ora riproducono esattamente il comportamento teorico el CZ gate descritto e quindi ne verificano la correttezza dell'implementazione da noi fatta.
+
+
+
+SLIDE 10 - Results 
+----------------------------------------------------------
+
+Una volta verificato ciò, i parametri ottimali sono stati variati per studiare il comportamento del CZ gate in condizioni differenti.
+
+Come ripetutamente detto, il punto chiave per una corretta implementazione del CZ gate è che gli stati ritornano in se stessi dopo la sua applicazione. Abbiamo dunque effettuato misure di fidelity per quantificare quanto variando i parametri questo comportamento sia verificato.
+
+Più nello specifico, nei grafici è riportato l'errore stimato come 1-fidelity tra stato iniziale e finale in funzione della variazione dei parametri.
+
+Per prima cosa, si è variato Omegatau. Per un sistema inizialmente in 01, l'errore commesso è quasi nullo e pertanto il grafico non è stato riportato.
+Invece, se il sistema è inizialmente in 11, l'errore in funzione della variazione è come nel grafico a sinistra (la riga blu). Vediamo addirittura che un picco di 0.5 viene raggiunto e che dopo il picco l'errore si annulla nuovamente. Li risiede il parametro ottimale Omegatau*.
+
+Poi, la quantità Delta/Omega è stata variata. Di nuovo, nel caso di 01, l'errore rimane approssimativamente nullo. 
+Invece il caso 11 è riportato nella figura a destra. Anche qua il parametro ottimale è riportato in arancione. Vediamo che per valori elevati di detuning, e quindi laser non in risonanza, l'errore aumenta considerevolmente in modo monotono raggiungendo un picco di 0.16.
+
+Per completezza in entrambi i grafici la fase dinamica acquisita dallo stato 11 è riportata in rosso.
+
+
+
+SLIDE 11 - Results 
+----------------------------------------------------------
+
+Analizziamo adesso il caso di blockade non perfetta, considerando un sistema inizialmente in 11 che come detto è l'unico influenzato da un valore di V finito.
+
+In tal caso, la dinamica è come quella di un sistema a tre livelli.
+A sinistra, abbiamo il grafico con la dipendenza dal tempo della popolazione per differenti valori dello strength parameter V. 
+Notiamo come per valori molto piccoli, il sistema oscilla effettivamente tra i tre livelli. Invece, per un valore di V già uguale a 100, notiamo come la popolazione del livello c2 sia nulla. Ovvero, la dinamica è come nel caso di blockade perfetta ovvero come un sistema a due livelli.
+
+Nel grafico a destra invece è riportata la fase dinamica acquisita da 01 (in blu) e 11 (in rosso) in funzione della variazione Delta/Omega. Vediamo che 01 varia come prima, mentre 11 ha un andamento diverso e più complesso. 
+
+
+
+SLIDE 12 - Results 
+----------------------------------------------------------
+
+Adesso, supponiamo di avere una coppia di atomi inizialmente in 11. Vogliamo studiare quali sono gli stati permessi e con che probabilità dopo l'applicazione del CZ gate assumendo una perturbazione gaussiana con media nulla e deviazione standard dell'1% sui parametri ottimali. L'esperimento è stato runnato 1000 volte. Ogni volta, è stato simulato il processo di misura e 10000 misure sono state raccolte. Tutti i dati sono stati raggruppati in uno stesso histogramma per ottenere maggiore statistica.
+
+Partiamo dunque dal caso della perfect blockade. Vediamo che un sistema inizialmente in 11 ritorna quasi sempre su se stessa, ma che vi è anche una piccola probabilità di trovare gli stati 1r e r1. Invece rr non è permesso.
+
+
+
+SLIDE 13 - Results 
+----------------------------------------------------------
+
+Sotto l'assunzione di imperfect blocakde, non sappiamo effettivamente quali siano i valori ottimali di omega e tau per realizzare un CZ gate come desiderato. In ogni caso, si è scelto di ripetere il processo di misura spiegato prima per vedere quali stati sono ammessi fissando gli stessi parametri ottimali.
+
+Vediamo che per V molto piccole, abbiamo un'alta probabilità di trovarci nello stato 11 e rr e anche gli stati 1r e r1 sono permessi. Invece, per V grandi, ad esempio 100, dopo un'appropriata rinormalizzazione del valore di detuning (come suggerito dal paper), si vede come lo stato 11 sia il più probabile. Le configurazioni 1r e r1 sono molto poco probabili. Lo stato rr è ancora permesso, ma la sua probabilità è drasticamente ridotta, così tanto che si potrebbe assumere già per V=100 perfect blockade.
+
+
+
+SLIDE 14 - Conclusions 
+----------------------------------------------------------
+
+In conclusione in questa prima parte del progetto abbiamo simulato numericamente la dinamica di un sistema a due qubit sotto l'applicazione di un CZ gate implementato come suggerito dal paper di Harry Levine e altri.
+Si è verificata la corretta implementazione di questo fissando i parametri ottimali.
+
+Poi, i parametri ottimali sono stati variati per investigare il comportamento del CZ gate in risposta a questa variazione.
+
+Infine, un rumore gaussiano è stato introdotto e il processo di misura è stato simulato sia nel caso di perfect blockade che imperfect.
+
+Grazie per l'attenzione.
+
+
